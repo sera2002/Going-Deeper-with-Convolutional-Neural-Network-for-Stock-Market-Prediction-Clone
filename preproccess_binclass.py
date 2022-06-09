@@ -11,7 +11,7 @@ from shutil import copyfile, move
 from pathlib import Path
 
 # https://github.com/matplotlib/mpl_finance
-from mpl_finance import candlestick2_ochl, volume_overlay
+from mplfinance.original_flavor import candlestick2_ochl, volume_overlay
 
 
 def isnan(value):
@@ -68,32 +68,38 @@ def image2dataset(input, label_file):
     # print(list(label_dict.values())[list(label_dict.keys()).index('FTSE-80')])
     path = "{}/{}".format(os.getcwd(), input)
     print(path)
-
+    
     for filename in os.listdir(path):
-        # print(filename)
+        #print(filename)
         # print(os.getcwd())
-        if filename is not '':
+        if filename != '':
             for k, v in label_dict.items():
                 splitname = filename.split("_")
                 f, e = os.path.splitext(filename)
-                # print("[DEBUG] - {}".format(splitname))
+                #print("** key : ", k, "  value : ", v)
+                #print("[DEBUG] - {}".format(splitname))
+                k = k + ".png"
+                #print("*****")
+                #print("key : ", k)
                 newname = "{}_{}".format(splitname[0], splitname[1])
+                #print("newname : ", newname)
                 if newname == k:
-                    # print("{} same with {} with v {}".format(filename, k, v))
+                    #print("{} same with {} with v {}".format(filename, k, v))
                     new_name = "{}{}.png".format(v, f)
 
                     os.rename("{}/{}".format(path, filename),
                               "{}/{}".format(path, new_name))
                     break
-
+        #break
+    
     folders = ['1', '0']
     for folder in folders:
         if not os.path.exists("{}/classes/{}".format(path, folder)):
             os.makedirs("{}/classes/{}".format(path, folder))
 
     for filename in os.listdir(path):
-        if filename is not '':
-            # print(filename[:1])
+        if filename != '':
+            #print(filename[:1])
             if filename[:1] == "1":
                 move("{}/{}".format(path, filename),
                      "{}/classes/1/{}".format(path, filename))
@@ -109,20 +115,29 @@ def createLabel(fname, seq_len):
     filename = fname.split('/')
     # print("{} - {}".format(filename[0], filename[1][:-4]))
     removeOutput("{}_label_{}.txt".format(filename[1][:-4], seq_len))
-
     df = pd.read_csv(fname, parse_dates=True, index_col=0)
     df.fillna(0)
 
     df.reset_index(inplace=True)
     df['Date'] = df['Date'].map(mdates.date2num)
+    #print(type(len(df)))
+    #print(type(int(seq_len)))
+    #numIterate = int(int(len(df)) / int(len(seq_len)))
+    #print(len(df))
+    #print(seq_len)
+    #print(int(len(df)/int(seq_len)))
+    #print(numIterate)
+    #for i in range(0, int(len(df)/int(seq_len))):
     for i in range(0, len(df)):
-        c = df.ix[i:i + int(seq_len), :]
+        c = df.iloc[i:i + int(seq_len), :]
 
         starting = 0
         endvalue = 0
         label = ""
-        
-        if len(c) == int(seq_len)+1:
+        #print("**length of csv file :", len(c))
+        #print("length of sequence :", int(seq_len))
+        if len(c) == int(seq_len):
+            #print("!")
             starting = c["Close"].iloc[-2] 
             endvalue = c["Close"].iloc[-1]
             # print(f'endvalue {endvalue} - starting {starting}')
@@ -131,6 +146,7 @@ def createLabel(fname, seq_len):
             else:
                 label = 0
             with open("{}_label_{}.txt".format(filename[1][:-4], seq_len), 'a') as the_file:
+                #print("file adding")
                 the_file.write("{}-{},{}".format(filename[1][:-4], i, label))
                 the_file.write("\n")
     print("Create label finished.")
@@ -159,9 +175,11 @@ def ohlc2cs(fname, seq_len, dataset_type, dimension, use_volume):
     plt.style.use('dark_background')
     df.reset_index(inplace=True)
     df['Date'] = df['Date'].map(mdates.date2num)
+    #for i in range(0, int(len(df)/int(seq_len))):
     for i in range(0, len(df)):
         # ohlc+volume
-        c = df.ix[i:i + int(seq_len) - 1, :]
+        c = df.iloc[i:i + int(seq_len), :]
+        
         if len(c) == int(seq_len):
             my_dpi = 96
             fig = plt.figure(figsize=(dimension / my_dpi,

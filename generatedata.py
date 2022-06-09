@@ -26,7 +26,6 @@ def cre8outputdir(pathdir, targetdir):
     if not os.path.exists("{}/{}/test/1".format(pathdir, targetdir)):
         os.mkdir("{}/{}/test/1".format(pathdir, targetdir))
 
-
 pathdir = sys.argv[1]
 origindir = sys.argv[2]
 targetdir = sys.argv[3]

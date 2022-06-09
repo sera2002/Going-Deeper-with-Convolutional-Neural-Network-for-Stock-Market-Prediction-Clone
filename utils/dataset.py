@@ -6,7 +6,7 @@ import sys
 import os
 from collections import defaultdict
 import numpy as np
-import scipy.misc
+import imageio
 
 
 def dataset(base_dir, n):
@@ -31,7 +31,7 @@ def dataset(base_dir, n):
         filenames = d[class_name]
         for filename in filenames:
 
-            img = scipy.misc.imread(filename)
+            img = imageio.imread(filename)
             height, width, chan = img.shape
             assert chan == 3
 

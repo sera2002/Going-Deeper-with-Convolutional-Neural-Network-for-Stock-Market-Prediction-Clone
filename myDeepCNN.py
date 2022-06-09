@@ -2,9 +2,9 @@ import tensorflow as tf
 import os
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-config = tf.ConfigProto()
+config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
-sess = tf.Session(config=config)
+sess = tf.compat.v1.Session(config=config)
 
 import math
 import json
@@ -13,10 +13,10 @@ import sys
 import keras
 from keras.layers import Input, Dense, Conv2D, MaxPooling2D, AveragePooling2D, ZeroPadding2D, Flatten, Activation, add
 from keras.layers import Dropout, Flatten
-from keras.layers.normalization import BatchNormalization
+from tensorflow.keras.layers import BatchNormalization
 from keras.models import Model, Sequential
 from keras import initializers
-from keras.engine import Layer, InputSpec
+from tensorflow.keras.layers import Layer, InputSpec
 from keras import backend as K
 from keras.utils import np_utils
 from keras.optimizers import *
@@ -31,7 +31,7 @@ from datetime import timedelta
 
 
 def build_dataset(data_directory, img_width):
-    X, y, tags = dataset.dataset(data_directory, int(img_width))
+    X, y, tags = dataset(data_directory, int(img_width))
     nb_classes = len(tags)
 
     sample_count = len(y)
@@ -117,7 +117,7 @@ def main():
     epochs = args.epochs
     batch_size = args.batch_size
     SHAPE = (img_width, img_height, channel)
-    bn_axis = 3 if K.image_dim_ordering() == 'tf' else 1
+    bn_axis = 3 if K.image_data_format() == 'tf' else 1
 
     data_directory = args.input
 

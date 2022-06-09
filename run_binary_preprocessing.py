@@ -54,17 +54,17 @@ except Exception as identifier:
 try:
     if onlytraining:
         # convert to candlestick chart training data
-        print('{RED}\nConvert Training Data to Candlestik{END}'.format(**formatters))
+        print('{RED}\nConvert Training Data to Candlestick{END}'.format(**formatters))
         subprocess.call(
             f'python preproccess_binclass.py -m ohlc2cs -l {windows_length} -i stockdatas/{symbol}_training.csv -t training -d {dimension} -v {use_volume}', shell=True)
-        print('{GREEN}Convert Training Data to Candlestik Done\n{END}'.format(
+        print('{GREEN}Convert Training Data to Candlestick Done\n{END}'.format(
             **formatters))
     if onlytesting:
         # convert to candlestick chart testing data
-        print('{RED}\nConvert Testing Data to Candlestik{END}'.format(**formatters))
+        print('{RED}\nConvert Testing Data to Candlestick{END}'.format(**formatters))
         subprocess.call(
             f'python preproccess_binclass.py -m ohlc2cs -l {windows_length} -i stockdatas/{symbol}_testing.csv -t testing -d {dimension} -v {use_volume}', shell=True)
-        print('{GREEN}Convert Testing Data to Candlestik Done\n{END}'.format(
+        print('{GREEN}Convert Testing Data to Candlestick Done\n{END}'.format(
             **formatters))
 except Exception as identifier:
     print(identifier)
