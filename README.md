@@ -10,5 +10,5 @@
 `python generatedata.py dataset 20_50/2880.TW dataset_2880TW_20_50`
 
 ### After executing the above commands, you should remove alpha channel but the below command does not work.
-`cd /dataset/dataset_2880TW_20_50`
+`cd /dataset/dataset_2880TW_20_50`   
 `find . -name "*.png" -exec convert "{}" -alpha off "{}" \;`
