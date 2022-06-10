@@ -4,7 +4,7 @@
 #### rosdyana/Going-Deeper-with-Convolutional-Neural-Network-for-Stock-Market-Prediction
 #### https://github.com/rosdyana/Going-Deeper-with-Convolutional-Neural-Network-for-Stock-Market-Prediction
 
-#### To run generate dataset, enter the commands below.
+#### To generate dataset, enter the commands below.
 `python run_binary_preprocessing.py 2880.TW 20 50`   
 `pip install -U -r requirements.txt`   
 `python generatedata.py dataset 20_50/2880.TW dataset_2880TW_20_50`
